@@ -2,7 +2,7 @@ import javax.swing.JFrame;
 
 public class PuyoGame {
     // Tamaño de la ventana del juego
-    public static final int WIDTH = 445, HEIGHT = 629;
+    public static final int WIDTH = 285, HEIGHT = 430;
     private Board board;
     private JFrame window;
     public PuyoGame(){
