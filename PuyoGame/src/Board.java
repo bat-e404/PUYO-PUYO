@@ -2,15 +2,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Board extends JPanel {
     public static final int BOARD_WIDTH = 6;
     public static final int BOARD_HEIGHT = 12;
     public static final int BLOCK_SIZE = 30;
 
+    private Map<Integer, String> imagePaths = new HashMap<>();
+    {
+        imagePaths.put(1, "resources/images/puyo_blue.png");
+    }
+
+    private int[][] board = new int[BOARD_WIDTH][BOARD_HEIGHT];
     private Timer looper;
 
-    private Color[][] board = new Color[BOARD_WIDTH][BOARD_HEIGHT];
+
 
     public Board(){
         looper = new Timer(500, new ActionListener() {
