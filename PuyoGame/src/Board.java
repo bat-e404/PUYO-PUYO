@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +14,10 @@ import java.util.Map;
 import java.util.List;
 
 
-public class Board extends JPanel {
+public class Board extends JPanel implements KeyListener {
+    private static int  FPS = 60;
+    private static int delay = FPS / 100;
+
     public static final int BOARD_WIDTH = 6;
     public static final int BOARD_HEIGHT = 12;
     public static final int BLOCK_SIZE = 30;
@@ -20,18 +25,23 @@ public class Board extends JPanel {
 
     private int[][] board = new int[BOARD_WIDTH][BOARD_HEIGHT];
     private Timer looper;
-    private int x = 2, y = 0;
+    private int x = 2, deltaX = 0, y = 0;
+    private boolean collision = false;
+    private int normal = 600;
+    private int fast = 50;
+    private int delayTimeForMovement = normal;
+    private  long beginTime;
     private BufferedImage img1, img2;
     private Sphere element = new Sphere();
 
-    List<Map.Entry<Integer, String>> lista = new ArrayList<>(element.dualSpheres.entrySet());
+
     public Board(){
 
-        looper = new Timer(500, new ActionListener() {
+        looper = new Timer(delay, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                y++;
+                update();
                 repaint();// Solicitud de repintar
             }
         });
@@ -39,16 +49,32 @@ public class Board extends JPanel {
         looper.start();
 
         try{
-            if (lista.size() >= 2) {
-                img1 = ImageIO.read(new File(lista.get(0).getValue()));
-                img2 = ImageIO.read(new File(lista.get(1).getValue()));
-            } else {
-                System.out.println("La lista no tiene al menos dos elementos.");
-            }
+            img1 = ImageIO.read(new File(String.valueOf(element.dualSpheres[0][1])));
+            img2 = ImageIO.read(new File(String.valueOf(element.dualSpheres[1][1])));
         }catch(IOException e){
             e.printStackTrace();
         }
 
+    }
+
+    private void update(){
+        if(collision){
+            return;
+        }
+        // Delimitar movimiento en Horizontal
+        if(x + deltaX < 5 && x + deltaX >= 0){
+            x += deltaX;
+        }
+        deltaX = 0;
+        if(System.currentTimeMillis() - beginTime > delayTimeForMovement){
+            if(y < 11 && y >= 0){
+                y++;
+            }else {
+                collision = true;
+            }
+
+            beginTime = System.currentTimeMillis();
+        }
     }
 
 
@@ -77,7 +103,31 @@ public class Board extends JPanel {
             g.drawLine(BLOCK_SIZE * j,0, BLOCK_SIZE * j, BLOCK_SIZE * BOARD_HEIGHT );
         }
 
+        repaint();
 
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_S){
+            delayTimeForMovement = fast;
+        } else if (e.getKeyCode() == KeyEvent.VK_D) {
+            deltaX = 1;
+        } else if (e.getKeyCode() == KeyEvent.VK_A) {
+            deltaX = -1;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_S){
+            delayTimeForMovement = normal;
+        }
 
     }
 }

@@ -1,7 +1,5 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+
 public class Stock {
 
     private static final int[][] stockSpheresCombination = {
@@ -24,11 +22,19 @@ public class Stock {
         imagePaths.put(4,"puyoYellow.png");
     }
     private Random random = new Random();
-    public Map<Integer,String> dualSpheres = new HashMap<>();
+    Object[][] dualSpheres = new Object[2][2];
     public void getImagesPaths(int[][]randomSpheres){
-        for(int i = 0; i < randomSpheres[0].length; i++){
-            dualSpheres.put(i,imagePaths.get(randomSpheres[0][i]));
+
+        dualSpheres[0][0] = randomSpheres[0][0];
+        dualSpheres[1][0] = randomSpheres[0][1];
+
+        for(int i = 0; i < dualSpheres.length; i++){
+            dualSpheres[i][1] = imagePaths.get(dualSpheres[i][0]);
         }
+
+        System.out.println(Arrays.deepToString(dualSpheres));
+
+
     }
     public void generatePairSpheres(){
         int numberRow = random.nextInt(10);

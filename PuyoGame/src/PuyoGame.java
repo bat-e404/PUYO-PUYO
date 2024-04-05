@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class PuyoGame {
     // Tamaño de la ventana del juego
-    public static final int WIDTH = 285, HEIGHT = 430;
+    public static final int WIDTH = 285, HEIGHT = 405;
     private Board board;
     private JFrame window;
     public PuyoGame(){
@@ -16,6 +16,7 @@ public class PuyoGame {
 
         board = new Board();
         window.add(board);
+        window.addKeyListener(board);
         window.setVisible(true);
     }
 
