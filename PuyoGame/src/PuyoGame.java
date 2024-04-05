@@ -1,4 +1,6 @@
 import javax.swing.JFrame;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class PuyoGame {
     // Tamaño de la ventana del juego
@@ -16,6 +18,7 @@ public class PuyoGame {
         window.add(board);
         window.setVisible(true);
     }
+
     public static void main(String[] args){
         new PuyoGame();
     }
